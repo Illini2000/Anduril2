@@ -30,7 +30,12 @@ uint8_t tint_ramping_state(Event event, uint16_t arg) {
         // toggle once on first frame; ignore other frames
         if (! arg) {
             tint = !tint;
-            set_level(actual_level);
+			uint8_t temp_level = memorized_level;
+			memorized_level = memorized_level2;
+			#ifdef TINT_RAMP_TOGGLE_ONLY
+			memorized_level2 = temp_level;
+			#endif
+			set_level(memorized_level);
             blink_once();
         }
         return EVENT_HANDLED;
