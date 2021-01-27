@@ -35,6 +35,10 @@ void load_config() {
         #endif
         #ifdef USE_MANUAL_MEMORY
         manual_memory = eeprom[manual_memory_e];
+		#ifdef TINT_RAMP_TOGGLE_ONLY
+		manual_memory2 = eeprom[manual_memory2_e]; // second channel for k9.3
+		manual_ch = eeprom[manual_ch_e];
+		#endif
         #ifdef USE_MANUAL_MEMORY_TIMER
         manual_memory_timer = eeprom[manual_memory_timer_e];
         #endif
@@ -99,6 +103,10 @@ void save_config() {
     #endif
     #ifdef USE_MANUAL_MEMORY
     eeprom[manual_memory_e] = manual_memory;
+	#ifdef TINT_RAMP_TOGGLE_ONLY
+	eeprom[manual_memory2_e] = manual_memory2; // second channel for k9.3
+	eeprom[manual_ch_e] = manual_ch;
+	#endif
     #ifdef USE_MANUAL_MEMORY_TIMER
     eeprom[manual_memory_timer_e] = manual_memory_timer;
     #endif

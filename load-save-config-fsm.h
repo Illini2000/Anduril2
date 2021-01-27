@@ -33,6 +33,10 @@ typedef enum {
     #endif
     #ifdef USE_MANUAL_MEMORY
     manual_memory_e,
+	#ifdef TINT_RAMP_TOGGLE_ONLY // channel 2 for k9.3
+	manual_memory2_e,
+	manual_ch_e,
+	#endif
     #ifdef USE_MANUAL_MEMORY_TIMER
     manual_memory_timer_e,
     #endif

@@ -393,6 +393,10 @@ uint8_t steady_state(Event event, uint16_t arg) {
     else if (event == EV_10clicks) {
         // turn on manual memory and save current brightness
         manual_memory = actual_level;
+		#ifdef TINT_RAMP_TOGGLE_ONLY
+		manual_memory2 = memorized_level2;
+		manual_ch = tint;
+		#endif
         save_config();
         blink_once();
         return MISCHIEF_MANAGED;

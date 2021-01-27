@@ -143,9 +143,12 @@ uint8_t off_state(Event event, uint16_t arg) {
             #endif
             ) {
                 #if defined(USE_MANUAL_MEMORY_TIMER_FOR_TINT) && defined(USE_TINT_RAMPING) && defined(TINT_RAMP_TOGGLE_ONLY)
-                tint = 0;
+                tint = manual_ch;
                 #endif
-                set_level(nearest_level(manual_memory));
+				set_level(nearest_level(manual_memory));
+				#ifdef TINT_RAMP_TOGGLE_ONLY
+				memorized_level2 = manual_memory2;
+				#endif
         } else
         #endif
         set_level(nearest_level(memorized_level));
@@ -160,6 +163,9 @@ uint8_t off_state(Event event, uint16_t arg) {
         #else
         // FIXME: B_TIMEOUT_T breaks manual_memory and manual_memory_timer
         //        (need to duplicate manual mem logic here, probably)
+		#if defined(USE_MANUAL_MEMORY_TIMER_FOR_TINT) && defined(USE_TINT_RAMPING) && defined(TINT_RAMP_TOGGLE_ONLY)
+		if(manual_memory) tint = manual_ch;
+		#endif
         set_state(steady_state, memorized_level);
         #endif
         return MISCHIEF_MANAGED;
