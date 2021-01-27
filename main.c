@@ -114,6 +114,10 @@
 #include "version-check-mode.h"
 #endif
 
+#ifdef USE_LEVEL_CHECK
+#include "level-check-mode.h"
+#endif
+
 #ifdef USE_BATTCHECK_MODE
 #include "battcheck-mode.h"
 #endif
@@ -167,6 +171,10 @@
 
 #ifdef USE_VERSION_CHECK
 #include "version-check-mode.c"
+#endif
+
+#ifdef USE_LEVEL_CHECK
+#include "level-check-mode.c"
 #endif
 
 #ifdef USE_BATTCHECK_MODE
@@ -277,6 +285,12 @@ void loop() {
         version_check_iter();
     }
     #endif
+	
+	#ifdef USE_LEVEL_CHECK
+	else if (state == level_check_state) {
+		level_check_iter();
+	}
+	#endif
 
     #ifdef USE_STROBE_STATE
     else if ((state == strobe_state)
@@ -307,12 +321,27 @@ void loop() {
         #endif
     }
     #endif
+	
+	#ifdef USE_LEVELCHECK
+	else if (state == levelcheck_state) {
+		levelcheck();
+		#ifdef USE_SIMPLE_UI
+		// in simple mode, turn off after one readout
+		// FIXME: can eat the next button press
+		//        (state changes in loop() act weird)
+		if (simple_ui_active) set_state_deferred(off_state, 0);
+		else nice_delay_ms(1000);
+		#endif
+	}
+	#endif
 
     #ifdef USE_THERMAL_REGULATION
     // TODO: blink out therm_ceil during thermal_config_state?
     else if (state == tempcheck_state) {
         blink_num(temperature);
         nice_delay_ms(1000);
+		blink_num(therm_ceil);
+		nice_delay_ms(2000);
     }
     #endif
 
