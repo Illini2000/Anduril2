@@ -264,23 +264,17 @@ uint8_t off_state(Event event, uint16_t arg) {
         return MISCHIEF_MANAGED;
     }
     #endif
+	#ifdef USE_LEVEL_CHECK
+	// 6 clicks: show the level
+	else if (event == EV_6clicks) {
+		set_state(level_check_state, 0);
+		return MISCHIEF_MANAGED;
+	}
+	#endif
+	 
     #ifdef USE_INDICATOR_LED
     // 7 clicks: change indicator LED mode
-    else if (event == EV_7clicks) {
-        uint8_t mode = (indicator_led_mode & 3) + 1;
-        #ifdef TICK_DURING_STANDBY
-        mode = mode & 3;
-        #else
-        mode = mode % 3;
-        #endif
-        #ifdef INDICATOR_LED_SKIP_LOW
-        if (mode == 1) { mode ++; }
-        #endif
-        indicator_led_mode = (indicator_led_mode & 0b11111100) | mode;
-        indicator_led(mode);
-        save_config();
-        return MISCHIEF_MANAGED;
-    }
+    // removed and added 8 click below
     #elif defined(USE_AUX_RGB_LEDS)
     // 7 clicks: change RGB aux LED pattern
     else if (event == EV_7clicks) {

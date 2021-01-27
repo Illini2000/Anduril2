@@ -110,6 +110,8 @@
 // include a function to blink out the firmware version
 #define USE_VERSION_CHECK
 
+#define USE_LEVEL_CHECK
+
 // enable the battery check mode (shows remaining charge) (requires USE_LVP)
 #define USE_BATTCHECK_MODE
 // battery readout style (pick one)
