@@ -54,7 +54,7 @@
 
 /********* specific settings for known driver types *********/
 // Anduril config file name (set it here or define it at the gcc command line)
-//#define CONFIGFILE cfg-blf-q8.h
+#define CONFIGFILE cfg-noctigon-k9.3.h
 
 #include "tk.h"
 #include incfile(CONFIGFILE)

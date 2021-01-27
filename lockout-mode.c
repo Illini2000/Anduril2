@@ -62,6 +62,9 @@ uint8_t lockout_state(Event event, uint16_t arg) {
     #elif defined(USE_AUX_RGB_LEDS)
     if (event == EV_enter_state) {
         rgb_led_update(rgb_led_lockout_mode, 0);
+		#ifdef USE_BUTTON_LED
+		button_led_update(button_led_lockout_mode,0);
+		#endif
     } else
     #endif
     if (event == EV_tick) {
@@ -71,6 +74,9 @@ uint8_t lockout_state(Event event, uint16_t arg) {
             indicator_led(indicator_led_mode >> 2);
             #elif defined(USE_AUX_RGB_LEDS)
             rgb_led_update(rgb_led_lockout_mode, arg);
+			#ifdef USE_BUTTON_LED
+			button_led_update(button_led_lockout_mode,arg);
+			#endif
             #endif
         }
         return MISCHIEF_MANAGED;
@@ -83,6 +89,9 @@ uint8_t lockout_state(Event event, uint16_t arg) {
         }
         #elif defined(USE_AUX_RGB_LEDS)
         rgb_led_update(rgb_led_lockout_mode, arg);
+		#ifdef USE_BUTTON_LED
+		button_led_update(button_led_lockout_mode,arg);
+		#endif
         #endif
         return MISCHIEF_MANAGED;
     }
@@ -159,6 +168,17 @@ uint8_t lockout_state(Event event, uint16_t arg) {
         blink_once();
         return MISCHIEF_MANAGED;
     }
+	#ifdef USE_BUTTON_LED
+	else if (event == EV_8clicks) {
+		uint8_t mode = (button_led_lockout_mode >> 4) + 1;
+		mode = mode % RGB_LED_NUM_PATTERNS;
+		button_led_lockout_mode = (mode << 4) | (button_led_lockout_mode & 0x0f);
+		button_led_update(button_led_lockout_mode, 0);
+		save_config();
+		blink_once();
+		return MISCHIEF_MANAGED;
+	}
+	#endif
     // 7H: change RGB aux LED color
     else if (event == EV_click7_hold) {
         setting_rgb_mode_now = 1;
